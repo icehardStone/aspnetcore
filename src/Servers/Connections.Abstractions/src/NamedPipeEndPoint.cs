@@ -4,7 +4,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
-namespace Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes;
+namespace Microsoft.AspNetCore.Connections;
 
 /// <summary>
 /// Represents a Named Pipe endpoint.
@@ -28,6 +28,7 @@ public sealed class NamedPipeEndPoint : EndPoint
     /// Gets the name of the remote computer. The server name must be ".", the local computer, when creating a server.
     /// </summary>
     public string ServerName { get; }
+
     /// <summary>
     /// Gets the name of the pipe.
     /// </summary>
@@ -40,7 +41,7 @@ public sealed class NamedPipeEndPoint : EndPoint
     {
         return $"pipe:{ServerName}/{PipeName}";
     }
-    
+
     /// <inheritdoc/>
     public override bool Equals([NotNullWhen(true)] object? obj)
     {

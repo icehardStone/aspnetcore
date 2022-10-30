@@ -10,6 +10,8 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.Internal;
 
 internal sealed class NamedPipeTransportFactory : IConnectionListenerFactory
 {
+    private const string LocalComputerServerName = ".";
+
     private readonly ILoggerFactory _loggerFactory;
     private readonly NamedPipeTransportOptions _options;
 
@@ -26,14 +28,14 @@ internal sealed class NamedPipeTransportFactory : IConnectionListenerFactory
     public ValueTask<IConnectionListener> BindAsync(EndPoint endpoint, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(endpoint);
-        
+
         if (endpoint is not NamedPipeEndPoint namedPipeEndPoint)
         {
             throw new NotSupportedException($"{endpoint.GetType()} is not supported.");
         }
-        if (namedPipeEndPoint.ServerName != NamedPipeEndPoint.LocalComputerServerName)
+        if (namedPipeEndPoint.ServerName != LocalComputerServerName)
         {
-            throw new NotSupportedException($@"Server name '{namedPipeEndPoint.ServerName}' is invalid. The server name must be ""."".");
+            throw new NotSupportedException($@"Server name '{namedPipeEndPoint.ServerName}' is invalid. The server name must be ""{LocalComputerServerName}"".");
         }
 
         // Creating a named pipe server with an name isn't exclusive. Create a mutex with the pipe name to prevent multiple endpoints
@@ -49,7 +51,7 @@ internal sealed class NamedPipeTransportFactory : IConnectionListenerFactory
 
         var listener = new NamedPipeConnectionListener(namedPipeEndPoint, _options, _loggerFactory, mutex);
         listener.Start();
-        
+
         return new ValueTask<IConnectionListener>(listener);
     }
 }

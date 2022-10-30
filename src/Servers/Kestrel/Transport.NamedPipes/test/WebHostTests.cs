@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Internal;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.Internal;
 using Microsoft.AspNetCore.Testing;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -38,7 +37,7 @@ public class WebHostTests : LoggedTest
                 webHostBuilder
                     .UseKestrel(o =>
                     {
-                        o.Listen(new NamedPipeEndPoint(pipeName));
+                        o.ListenNamedPipe(pipeName);
                     })
                     .Configure(app =>
                     {
@@ -98,7 +97,7 @@ public class WebHostTests : LoggedTest
                 webHostBuilder
                     .UseKestrel(o =>
                     {
-                        o.Listen(new NamedPipeEndPoint(pipeName), listenOptions =>
+                        o.ListenNamedPipe(pipeName, listenOptions =>
                         {
                             listenOptions.Protocols = HttpProtocols.Http1;
                         });
@@ -174,7 +173,7 @@ public class WebHostTests : LoggedTest
                 webHostBuilder
                     .UseKestrel(o =>
                     {
-                        o.Listen(new NamedPipeEndPoint(pipeName), options =>
+                        o.ListenNamedPipe(pipeName, options =>
                         {
                             options.Protocols = protocols;
                         });
@@ -241,7 +240,7 @@ public class WebHostTests : LoggedTest
                 webHostBuilder
                     .UseKestrel(o =>
                     {
-                        o.Listen(new NamedPipeEndPoint(pipeName), options =>
+                        o.ListenNamedPipe(pipeName, options =>
                         {
                             options.Protocols = protocols;
                             options.UseHttps(TestResources.GetTestCertificate());
@@ -317,7 +316,7 @@ public class WebHostTests : LoggedTest
                 direction: PipeDirection.InOut,
                 options: PipeOptions.WriteThrough | PipeOptions.Asynchronous,
                 impersonationLevel: _impersonationLevel ?? TokenImpersonationLevel.Anonymous);
-            
+
             try
             {
                 await clientStream.ConnectAsync(cancellationToken).ConfigureAwait(false);
