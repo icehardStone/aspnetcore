@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.Internal;
 
-internal sealed class NamedPipeTransportFactory : IConnectionListenerFactory
+internal sealed class NamedPipeTransportFactory : IConnectionListenerFactory, IConnectionListenerFactorySelector
 {
     private const string LocalComputerServerName = ".";
 
@@ -53,5 +53,12 @@ internal sealed class NamedPipeTransportFactory : IConnectionListenerFactory
         listener.Start();
 
         return new ValueTask<IConnectionListener>(listener);
+    }
+
+    public bool CanBind(EndPoint endpoint)
+    {
+        ArgumentNullException.ThrowIfNull(endpoint);
+
+        return endpoint is NamedPipeEndPoint;
     }
 }

@@ -33,7 +33,6 @@ public class WebHostTests : LoggedTest
         var builder = new HostBuilder()
             .ConfigureWebHost(webHostBuilder =>
             {
-                webHostBuilder.UseNamedPipes();
                 webHostBuilder
                     .UseKestrel(o =>
                     {
@@ -86,14 +85,6 @@ public class WebHostTests : LoggedTest
         var builder = new HostBuilder()
             .ConfigureWebHost(webHostBuilder =>
             {
-                webHostBuilder.UseNamedPipes(options =>
-                {
-                    var ps = new PipeSecurity();
-                    ps.AddAccessRule(new PipeAccessRule("Users", PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow));
-
-                    options.PipeSecurity = ps;
-                    options.CurrentUserOnly = false;
-                });
                 webHostBuilder
                     .UseKestrel(o =>
                     {
@@ -124,7 +115,18 @@ public class WebHostTests : LoggedTest
                         });
                     });
             })
-            .ConfigureServices(AddTestLogging);
+            .ConfigureServices(services =>
+            {
+                AddTestLogging(services);
+                services.AddNamedPipes(options =>
+                {
+                    var ps = new PipeSecurity();
+                    ps.AddAccessRule(new PipeAccessRule("Users", PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow));
+
+                    options.PipeSecurity = ps;
+                    options.CurrentUserOnly = false;
+                });
+            });
 
         using (var host = builder.Build())
         using (var client = CreateClient(pipeName, TokenImpersonationLevel.Impersonation))
@@ -169,7 +171,6 @@ public class WebHostTests : LoggedTest
         var builder = new HostBuilder()
             .ConfigureWebHost(webHostBuilder =>
             {
-                webHostBuilder.UseNamedPipes();
                 webHostBuilder
                     .UseKestrel(o =>
                     {
@@ -236,7 +237,6 @@ public class WebHostTests : LoggedTest
         var builder = new HostBuilder()
             .ConfigureWebHost(webHostBuilder =>
             {
-                webHostBuilder.UseNamedPipes();
                 webHostBuilder
                     .UseKestrel(o =>
                     {
