@@ -54,7 +54,7 @@ public class ListenOptions : IConnectionBuilder, IMultiplexedConnectionBuilder
     /// Gets the bound <see cref="System.Net.IPEndPoint"/>.
     /// </summary>
     /// <remarks>
-    /// Only set if the <see cref="ListenOptions"/> <see cref="Type"/> is <see cref="System.Net.IPEndPoint"/>.
+    /// Only set if the <see cref="ListenOptions"/> is bound to a <see cref="System.Net.IPEndPoint"/>.
     /// </remarks>
     public IPEndPoint? IPEndPoint => EndPoint as IPEndPoint;
 
@@ -62,7 +62,7 @@ public class ListenOptions : IConnectionBuilder, IMultiplexedConnectionBuilder
     /// Gets the bound absolute path to a Unix domain socket.
     /// </summary>
     /// <remarks>
-    /// Only set if the <see cref="ListenOptions"/> <see cref="Type"/> is <see cref="UnixDomainSocketEndPoint"/>.
+    /// Only set if the <see cref="ListenOptions"/> is bound to a <see cref="UnixDomainSocketEndPoint"/>.
     /// </remarks>
     public string? SocketPath => (EndPoint as UnixDomainSocketEndPoint)?.ToString();
 
@@ -70,7 +70,7 @@ public class ListenOptions : IConnectionBuilder, IMultiplexedConnectionBuilder
     /// Gets the bound pipe name to a name pipe server.
     /// </summary>
     /// <remarks>
-    /// Only set if the <see cref="ListenOptions"/> <see cref="Type"/> is <see cref="NamedPipeEndPoint"/>.
+    /// Only set if the <see cref="ListenOptions"/> is bound to a <see cref="NamedPipeEndPoint"/>.
     /// </remarks>
     public string? PipeName => (EndPoint as NamedPipeEndPoint)?.ToString();
 
@@ -78,7 +78,7 @@ public class ListenOptions : IConnectionBuilder, IMultiplexedConnectionBuilder
     /// Gets the bound file descriptor to a socket.
     /// </summary>
     /// <remarks>
-    /// Only set if the <see cref="ListenOptions"/> <see cref="Type"/> is <see cref="FileHandleEndPoint"/>.
+    /// Only set if the <see cref="ListenOptions"/> is bound to a <see cref="FileHandleEndPoint"/>.
     /// </remarks>
     public ulong FileHandle => (EndPoint as FileHandleEndPoint)?.FileHandle ?? 0;
 
